@@ -9,10 +9,10 @@ crystal: 0.23.1
 
 dependencies:
   bindgen:
-    github: Papierkorb/bindgen
+    github: ZaWertun/bindgen
     branch: master
 
 scripts:
-  postinstall: crystal deps build
+  postinstall: shards
 
 license: MPL-2
