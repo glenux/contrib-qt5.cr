@@ -206,7 +206,7 @@ end
 
 # Kick off
 FileUtils.mkdir_p(TEMPDIR)
-platforms = configurations.map{|x| TargetPlatform.new(*x)}
+platforms = [configurations.last].map{|x| TargetPlatform.new(*x)}
 versions = platforms.map(&.qt).uniq
 
 # Download and unpack Qt sources
