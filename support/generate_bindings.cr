@@ -29,16 +29,32 @@ struct QtVersion
   def initialize(@name)
   end
 
+  def file_name
+    if major == 5 && minor >= 10
+      "qt-everywhere-src-#{@name}.0"
+    else
+      "qt-everywhere-opensource-src-#{@name}.0"
+    end
+  end
+
   def download_url
-    "https://download.qt.io/archive/qt/#{@name}/#{@name}.0/single/qt-everywhere-src-#{@name}.0.tar.xz"
+    "https://download.qt.io/archive/qt/#{@name}/#{@name}.0/single/#{file_name}.tar.xz"
   end
 
   def archive_path
-    "#{TEMPDIR}/qt-everywhere-src-#{@name}.0.tar.xz"
+    "#{TEMPDIR}/#{file_name}.tar.xz"
   end
 
   def path
-    "#{TEMPDIR}/qt-everywhere-src-#{@name}.0"
+    "#{TEMPDIR}/#{file_name}"
+  end
+
+  private def major
+    @name.split('.')[0].to_i
+  end
+
+  private def minor
+    @name.split('.')[1].to_i
   end
 end
 
