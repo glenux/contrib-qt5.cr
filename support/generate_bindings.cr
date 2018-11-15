@@ -248,7 +248,7 @@ if SYSTEM
       include_dir = $1
     when /QT_INSTALL_LIBS:(.+)/
       libs_dir = $1
-    when /QT_VERSION:(.+)/
+    when /QT_VERSION:(.+)\.\d+/
       version = $1
     end
   end
