@@ -59,7 +59,7 @@ module Qt
     abstract class SequentialContainer(T)
       include Indexable(T)
   
-      # `#unsafe_at` and `#size` will be implemented by the wrapper class.
+      # `#unsafe_fetch` and `#size` will be implemented by the wrapper class.
   
       # Adds an element at the end.  Implemented by the wrapper.
       abstract def push(value)
@@ -23289,7 +23289,7 @@ module Qt
       Qt::Converter::QString.unwrap(Binding.bg_QCoreApplication_trUtf8_STATIC_const_char_X_const_char_X_int(s, c, n))
     end
     
-    def initialize(argc : Int32*, argv : UInt8**, unnamed_arg_2 : Int32 = 330497)
+    def initialize(argc : Int32*, argv : UInt8**, unnamed_arg_2 : Int32 = 330496)
       result = Binding.bg_QCoreApplication__CONSTRUCT_int_R_char_XX_int(argc, argv, unnamed_arg_2)
     @unwrap = result
     {% begin %}
@@ -23642,7 +23642,7 @@ module Qt
       Qt::Converter::QString.unwrap(Binding.bg_QGuiApplication_trUtf8_STATIC_const_char_X_const_char_X_int(s, c, n))
     end
     
-    def initialize(argc : Int32*, argv : UInt8**, unnamed_arg_2 : Int32 = 330497)
+    def initialize(argc : Int32*, argv : UInt8**, unnamed_arg_2 : Int32 = 330496)
       result = Binding.bg_QGuiApplication__CONSTRUCT_int_R_char_XX_int(argc, argv, unnamed_arg_2)
     @unwrap = result
     {% begin %}
@@ -24047,7 +24047,7 @@ module Qt
       Qt::Converter::QString.unwrap(Binding.bg_QApplication_trUtf8_STATIC_const_char_X_const_char_X_int(s, c, n))
     end
     
-    def initialize(argc : Int32*, argv : UInt8**, unnamed_arg_2 : Int32 = 330497)
+    def initialize(argc : Int32*, argv : UInt8**, unnamed_arg_2 : Int32 = 330496)
       result = Binding.bg_QApplication__CONSTRUCT_int_R_char_XX_int(argc, argv, unnamed_arg_2)
     @unwrap = result
     {% begin %}
@@ -46693,11 +46693,11 @@ module Qt
     end
     
   end
-  QT_VERSION = 330497
-  QT_VERSION_STR = "5.11.1"
+  QT_VERSION = 330496
+  QT_VERSION_STR = "5.11.0"
   QT_VERSION_MAJOR = 5
   QT_VERSION_MINOR = 11
-  QT_VERSION_PATCH = 1
+  QT_VERSION_PATCH = 0
   def self.q_version() : UInt8*
     Binding.bg____qVersion_STATIC_()
   end
@@ -46710,7 +46710,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Float64
+    def unsafe_fetch(index : Int32) : Float64
       Binding.bg_Container_QList_qreal_at_int(self, index)
     end
     
@@ -46739,7 +46739,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Object
+    def unsafe_fetch(index : Int32) : Object
       Object.new(unwrap: Binding.bg_Container_QList_QObject_X_at_int(self, index))
     end
     
@@ -46768,7 +46768,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Binding::EventDispatcherTimerInfo
+    def unsafe_fetch(index : Int32) : Binding::EventDispatcherTimerInfo
       Binding.bg_Container_QList_QAbstractEventDispatcher__TimerInfo_at_int(self, index)
     end
     
@@ -46797,7 +46797,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Action
+    def unsafe_fetch(index : Int32) : Action
       Action.new(unwrap: Binding.bg_Container_QList_QAction_X_at_int(self, index))
     end
     
@@ -46826,7 +46826,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Widget
+    def unsafe_fetch(index : Int32) : Widget
       Widget.new(unwrap: Binding.bg_Container_QList_QWidget_X_at_int(self, index))
     end
     
@@ -46855,7 +46855,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : KeySequence
+    def unsafe_fetch(index : Int32) : KeySequence
       KeySequence.new(unwrap: Binding.bg_Container_QList_QKeySequence_at_int(self, index))
     end
     
@@ -46884,7 +46884,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : GraphicsWidget
+    def unsafe_fetch(index : Int32) : GraphicsWidget
       GraphicsWidget.new(unwrap: Binding.bg_Container_QList_QGraphicsWidget_X_at_int(self, index))
     end
     
@@ -46913,7 +46913,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : DockWidget
+    def unsafe_fetch(index : Int32) : DockWidget
       DockWidget.new(unwrap: Binding.bg_Container_QList_QDockWidget_X_at_int(self, index))
     end
     
@@ -46942,7 +46942,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Int32
+    def unsafe_fetch(index : Int32) : Int32
       Binding.bg_Container_QList_int_at_int(self, index)
     end
     
@@ -46971,7 +46971,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : AbstractButton
+    def unsafe_fetch(index : Int32) : AbstractButton
       AbstractButtonImpl.new(unwrap: Binding.bg_Container_QList_QAbstractButton_X_at_int(self, index))
     end
     
@@ -47000,7 +47000,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Window
+    def unsafe_fetch(index : Int32) : Window
       Window.new(unwrap: Binding.bg_Container_QList_QWindow_X_at_int(self, index))
     end
     
@@ -47029,7 +47029,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Screen
+    def unsafe_fetch(index : Int32) : Screen
       Screen.new(unwrap: Binding.bg_Container_QList_QScreen_X_at_int(self, index))
     end
     
@@ -47058,7 +47058,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Variant
+    def unsafe_fetch(index : Int32) : Variant
       Qt::Variant.new(Binding.bg_Container_QList_QVariant_at_int(self, index))
     end
     
@@ -47087,7 +47087,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Binding::QSize*
+    def unsafe_fetch(index : Int32) : Binding::QSize*
       Binding.bg_Container_QList_QSize_at_int(self, index)
     end
     
@@ -47116,7 +47116,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Url
+    def unsafe_fetch(index : Int32) : Url
       Url.new(unwrap: Binding.bg_Container_QList_QUrl_at_int(self, index))
     end
     
@@ -47145,7 +47145,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Float64
+    def unsafe_fetch(index : Int32) : Float64
       Binding.bg_Container_QList_double_at_int(self, index)
     end
     
@@ -47174,7 +47174,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Binding::QFileInfo*
+    def unsafe_fetch(index : Int32) : Binding::QFileInfo*
       Binding.bg_Container_QList_QFileInfo_at_int(self, index)
     end
     
@@ -47203,7 +47203,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : GraphicsItem
+    def unsafe_fetch(index : Int32) : GraphicsItem
       GraphicsItemImpl.new(unwrap: Binding.bg_Container_QList_QGraphicsItem_X_at_int(self, index))
     end
     
@@ -47232,7 +47232,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : GraphicsTransform
+    def unsafe_fetch(index : Int32) : GraphicsTransform
       GraphicsTransformImpl.new(unwrap: Binding.bg_Container_QList_QGraphicsTransform_X_at_int(self, index))
     end
     
@@ -47261,7 +47261,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : GraphicsView
+    def unsafe_fetch(index : Int32) : GraphicsView
       GraphicsView.new(unwrap: Binding.bg_Container_QList_QGraphicsView_X_at_int(self, index))
     end
     
@@ -47290,7 +47290,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : RectF
+    def unsafe_fetch(index : Int32) : RectF
       RectF.new(unwrap: Binding.bg_Container_QList_QRectF_at_int(self, index))
     end
     
@@ -47319,7 +47319,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Gesture
+    def unsafe_fetch(index : Int32) : Gesture
       Gesture.new(unwrap: Binding.bg_Container_QList_QGesture_X_at_int(self, index))
     end
     
@@ -47348,7 +47348,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : UInt32
+    def unsafe_fetch(index : Int32) : UInt32
       Binding.bg_Container_QVector_QRgb_at_int(self, index)
     end
     
@@ -47377,7 +47377,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : UInt32
+    def unsafe_fetch(index : Int32) : UInt32
       Binding.bg_Container_QVector_unsigned_int_at_int(self, index)
     end
     
@@ -47406,7 +47406,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : TextFormat
+    def unsafe_fetch(index : Int32) : TextFormat
       TextFormat.new(unwrap: Binding.bg_Container_QVector_QTextFormat_at_int(self, index))
     end
     
@@ -47435,7 +47435,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : QLineF
+    def unsafe_fetch(index : Int32) : QLineF
       QLineF.new(unwrap: Binding.bg_Container_QVector_QLineF_at_int(self, index))
     end
     
@@ -47464,7 +47464,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : PointF
+    def unsafe_fetch(index : Int32) : PointF
       PointF.new(unwrap: Binding.bg_Container_QVector_QPointF_at_int(self, index))
     end
     
@@ -47493,7 +47493,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : QLine
+    def unsafe_fetch(index : Int32) : QLine
       QLine.new(unwrap: Binding.bg_Container_QVector_QLine_at_int(self, index))
     end
     
@@ -47522,7 +47522,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Point
+    def unsafe_fetch(index : Int32) : Point
       Point.new(unwrap: Binding.bg_Container_QVector_QPoint_at_int(self, index))
     end
     
@@ -47551,7 +47551,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : RectF
+    def unsafe_fetch(index : Int32) : RectF
       RectF.new(unwrap: Binding.bg_Container_QVector_QRectF_at_int(self, index))
     end
     
@@ -47580,7 +47580,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : Rect
+    def unsafe_fetch(index : Int32) : Rect
       Rect.new(unwrap: Binding.bg_Container_QVector_QRect_at_int(self, index))
     end
     
@@ -47609,7 +47609,7 @@ module Qt
     @unwrap = result
     end
     
-    def unsafe_at(index : Int32) : TextLength
+    def unsafe_fetch(index : Int32) : TextLength
       TextLength.new(unwrap: Binding.bg_Container_QVector_QTextLength_at_int(self, index))
     end
     
@@ -48513,14 +48513,14 @@ module Qt
     F33 = 16777296
     F34 = 16777297
     F35 = 16777298
-    SuperL = 16777299
-    SuperR = 16777300
+    Super_L = 16777299
+    Super_R = 16777300
     Menu = 16777301
-    HyperL = 16777302
-    HyperR = 16777303
+    Hyper_L = 16777302
+    Hyper_R = 16777303
     Help = 16777304
-    DirectionL = 16777305
-    DirectionR = 16777312
+    Direction_L = 16777305
+    Direction_R = 16777312
     Space = 32
     Any = 32
     Exclam = 33
@@ -48658,88 +48658,88 @@ module Qt
     Division = 247
     Ydiaeresis = 255
     AltGr = 16781571
-    MultiKey = 16781600
+    Multi_key = 16781600
     Codeinput = 16781623
     SingleCandidate = 16781628
     MultipleCandidate = 16781629
     PreviousCandidate = 16781630
-    ModeSwitch = 16781694
+    Mode_switch = 16781694
     Kanji = 16781601
     Muhenkan = 16781602
     Henkan = 16781603
     Romaji = 16781604
     Hiragana = 16781605
     Katakana = 16781606
-    HiraganaKatakana = 16781607
+    Hiragana_Katakana = 16781607
     Zenkaku = 16781608
     Hankaku = 16781609
-    ZenkakuHankaku = 16781610
+    Zenkaku_Hankaku = 16781610
     Touroku = 16781611
     Massyo = 16781612
-    KanaLock = 16781613
-    KanaShift = 16781614
-    EisuShift = 16781615
-    EisuToggle = 16781616
+    Kana_Lock = 16781613
+    Kana_Shift = 16781614
+    Eisu_Shift = 16781615
+    Eisu_toggle = 16781616
     Hangul = 16781617
-    HangulStart = 16781618
-    HangulEnd = 16781619
-    HangulHanja = 16781620
-    HangulJamo = 16781621
-    HangulRomaja = 16781622
-    HangulJeonja = 16781624
-    HangulBanja = 16781625
-    HangulPreHanja = 16781626
-    HangulPostHanja = 16781627
-    HangulSpecial = 16781631
-    DeadGrave = 16781904
-    DeadAcute = 16781905
-    DeadCircumflex = 16781906
-    DeadTilde = 16781907
-    DeadMacron = 16781908
-    DeadBreve = 16781909
-    DeadAbovedot = 16781910
-    DeadDiaeresis = 16781911
-    DeadAbovering = 16781912
-    DeadDoubleacute = 16781913
-    DeadCaron = 16781914
-    DeadCedilla = 16781915
-    DeadOgonek = 16781916
-    DeadIota = 16781917
-    DeadVoicedSound = 16781918
-    DeadSemivoicedSound = 16781919
-    DeadBelowdot = 16781920
-    DeadHook = 16781921
-    DeadHorn = 16781922
-    DeadStroke = 16781923
-    DeadAbovecomma = 16781924
-    DeadAbovereversedcomma = 16781925
-    DeadDoublegrave = 16781926
-    DeadBelowring = 16781927
-    DeadBelowmacron = 16781928
-    DeadBelowcircumflex = 16781929
-    DeadBelowtilde = 16781930
-    DeadBelowbreve = 16781931
-    DeadBelowdiaeresis = 16781932
-    DeadInvertedbreve = 16781933
-    DeadBelowcomma = 16781934
-    DeadCurrency = 16781935
-    DeadA = 16781952
-    #DeadA = 16781953 # FIXME: duplicate
-    DeadE = 16781954
-    #DeadE = 16781955 # FIXME: duplicate
-    DeadI = 16781956
-    #DeadI = 16781957 # FIXME: duplicate
-    DeadO = 16781958
-    #DeadO = 16781959 # FIXME: duplicate
-    DeadU = 16781960
-    #DeadU = 16781961 # FIXME: duplicate
-    DeadSmallSchwa = 16781962
-    DeadCapitalSchwa = 16781963
-    DeadGreek = 16781964
-    DeadLowline = 16781968
-    DeadAboveverticalline = 16781969
-    DeadBelowverticalline = 16781970
-    DeadLongsolidusoverlay = 16781971
+    Hangul_Start = 16781618
+    Hangul_End = 16781619
+    Hangul_Hanja = 16781620
+    Hangul_Jamo = 16781621
+    Hangul_Romaja = 16781622
+    Hangul_Jeonja = 16781624
+    Hangul_Banja = 16781625
+    Hangul_PreHanja = 16781626
+    Hangul_PostHanja = 16781627
+    Hangul_Special = 16781631
+    Dead_Grave = 16781904
+    Dead_Acute = 16781905
+    Dead_Circumflex = 16781906
+    Dead_Tilde = 16781907
+    Dead_Macron = 16781908
+    Dead_Breve = 16781909
+    Dead_Abovedot = 16781910
+    Dead_Diaeresis = 16781911
+    Dead_Abovering = 16781912
+    Dead_Doubleacute = 16781913
+    Dead_Caron = 16781914
+    Dead_Cedilla = 16781915
+    Dead_Ogonek = 16781916
+    Dead_Iota = 16781917
+    Dead_Voiced_Sound = 16781918
+    Dead_Semivoiced_Sound = 16781919
+    Dead_Belowdot = 16781920
+    Dead_Hook = 16781921
+    Dead_Horn = 16781922
+    Dead_Stroke = 16781923
+    Dead_Abovecomma = 16781924
+    Dead_Abovereversedcomma = 16781925
+    Dead_Doublegrave = 16781926
+    Dead_Belowring = 16781927
+    Dead_Belowmacron = 16781928
+    Dead_Belowcircumflex = 16781929
+    Dead_Belowtilde = 16781930
+    Dead_Belowbreve = 16781931
+    Dead_Belowdiaeresis = 16781932
+    Dead_Invertedbreve = 16781933
+    Dead_Belowcomma = 16781934
+    Dead_Currency = 16781935
+    Dead_a = 16781952
+    Dead_A = 16781953
+    Dead_e = 16781954
+    Dead_E = 16781955
+    Dead_i = 16781956
+    Dead_I = 16781957
+    Dead_o = 16781958
+    Dead_O = 16781959
+    Dead_u = 16781960
+    Dead_U = 16781961
+    Dead_Small_Schwa = 16781962
+    Dead_Capital_Schwa = 16781963
+    Dead_Greek = 16781964
+    Dead_Lowline = 16781968
+    Dead_Aboveverticalline = 16781969
+    Dead_Belowverticalline = 16781970
+    Dead_Longsolidusoverlay = 16781971
     Back = 16777313
     Forward = 16777314
     Stop = 16777315
