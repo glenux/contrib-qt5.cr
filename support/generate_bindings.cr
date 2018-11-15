@@ -67,12 +67,32 @@ class TargetPlatform
   getter pointer_size : Int32
   getter endian : String
 
+  property dir : String
+  property qmake : String
+  property libs_dir : String
+  property include_dir : String?
+
   def initialize(@os, @libc, @arch, qt, @triple, @pointer_size, @endian)
     @qt = QtVersion.new(qt)
+    @dir = @qt.path
+    @qmake = "#{@qt.path}/qtbase/bin/qmake"
+    @libs_dir = "#{@qt.path}/qtbase/libs"
+    @include_dir = nil
   end
 
   def target
     "#{@os}-#{@libc}-#{@arch}-qt#{@qt}"
+  end
+
+  def env
+    {
+      "QTDIR" => @dir,
+      "QMAKE" => @qmake,
+      "QT_LIBS_DIR" => @libs_dir,
+      "TARGET_TRIPLE" => @triple,
+      "BINDING_PLATFORM" => target,
+    }
+    .tap {|h| h["QT_INCLUDE_DIR"] = @include_dir.not_nil! if @include_dir }
   end
 end
 
@@ -209,22 +229,50 @@ FileUtils.mkdir_p(TEMPDIR)
 platforms = [configurations.last].map{|x| TargetPlatform.new(*x)}
 versions = platforms.map(&.qt).uniq
 
-# Download and unpack Qt sources
-download_missing_qts(versions)
-unpack_qts(versions)
-configure_qts(versions)
+SYSTEM = ARGV.includes?("--system")
+
+if SYSTEM
+  query = `qmake -query 2>/dev/null`
+  query = `qmake-qt5 -query 2>/dev/null` if query.empty?
+  raise "Can't find qmake/qmake-qt5 executable in PATH" if query.empty?
+
+  dir : String? = nil
+  version : String? = nil
+  libs_dir : String? = nil
+  include_dir : String? = nil
+  query.each_line do |l|
+    case l
+    when /QT_INSTALL_PREFIX:(.+)/
+      dir = $1
+    when /QT_INSTALL_HEADERS:(.+)/
+      include_dir = $1
+    when /QT_INSTALL_LIBS:(.+)/
+      libs_dir = $1
+    when /QT_VERSION:(.+)/
+      version = $1
+    end
+  end
+
+  platform = TargetPlatform.new(
+      "linux", "gnu", "x86_64", version.not_nil!, "x86_64-unknown-linux-gnu", 8, "little"
+  ).tap do |p|
+    p.dir = dir.not_nil!
+    p.libs_dir = libs_dir.not_nil!
+    p.include_dir = include_dir.not_nil!
+  end
+
+  platforms = [platform]
+else
+  # Download and unpack Qt sources
+  download_missing_qts(versions)
+  unpack_qts(versions)
+  configure_qts(versions)
+end
 
 # Run bindgen for all configured platforms
 report_step "Generating bindings for all platforms"
 platforms.each_with_index do |platform, idx|
-  env = { # Set environment variables for `config/find_paths.yml`
-    "QTDIR" => platform.qt.path,
-    "QMAKE" => "#{platform.qt.path}/qtbase/bin/qmake",
-    # "QT_INCLUDE_DIR" => Auto configured,
-    "QT_LIBS_DIR" => "#{platform.qt.path}/qtbase/libs",
-    "TARGET_TRIPLE" => platform.triple,
-    "BINDING_PLATFORM" => platform.target,
-  }
+  env = platform.env
 
   args = [ # Arguments to bindgen
     "qt.yml",
