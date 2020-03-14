@@ -8,36 +8,63 @@
 require "file_utils"
 require "colorize"
 require "ini"
+require "file"
 
 configurations = [
 #      OS       LIBC   ARCH      Qt     Clang target triplet      Ptr  Endian
-  { "linux", "gnu", "x86_64", "5.5",  "x86_64-unknown-linux-gnu", 8, "little" },
-  { "linux", "gnu", "x86_64", "5.6",  "x86_64-unknown-linux-gnu", 8, "little" },
-  { "linux", "gnu", "x86_64", "5.7",  "x86_64-unknown-linux-gnu", 8, "little" },
-  { "linux", "gnu", "x86_64", "5.8",  "x86_64-unknown-linux-gnu", 8, "little" },
-  { "linux", "gnu", "x86_64", "5.9",  "x86_64-unknown-linux-gnu", 8, "little" },
-  { "linux", "gnu", "x86_64", "5.10", "x86_64-unknown-linux-gnu", 8, "little" },
+#  { "linux", "gnu", "x86_64", "5.5",  "x86_64-unknown-linux-gnu", 8, "little" },
+#  { "linux", "gnu", "x86_64", "5.6",  "x86_64-unknown-linux-gnu", 8, "little" },
+#  { "linux", "gnu", "x86_64", "5.7",  "x86_64-unknown-linux-gnu", 8, "little" },
+#  { "linux", "gnu", "x86_64", "5.8",  "x86_64-unknown-linux-gnu", 8, "little" },
+#  { "linux", "gnu", "x86_64", "5.9",  "x86_64-unknown-linux-gnu", 8, "little" },
+#  { "linux", "gnu", "x86_64", "5.10", "x86_64-unknown-linux-gnu", 8, "little" },
+#  { "linux", "gnu", "x86_64", "5.12", "x86_64-unknown-linux-gnu", 8, "little" },
+  { "linux", "gnu", "x86_64", "5.12.3", "x86_64-unknown-linux-gnu", 8, "little" },
 ]
 
 TEMPDIR = File.expand_path("#{__DIR__}/../download_cache")
 
 struct QtVersion
   getter name : String
+  getter major : Int32
+  getter minor : Int32
+  getter patch : Int32
   delegate to_s, to: @name
 
   def initialize(@name)
+    @major, @minor, @patch = (@name.split(/\./).map(&.to_i) + [0])[0..2]
+  end
+
+  def semver_short
+    "#{@major}.#{@minor}"
+  end
+
+  def semver
+    "#{@major}.#{@minor}.#{@patch}"
   end
 
   def download_url
-    "https://download.qt.io/archive/qt/#{@name}/#{@name}.0/single/qt-everywhere-opensource-src-#{@name}.0.tar.xz"
+    if @major == 5 && @minor >= 12
+      "https://download.qt.io/archive/qt/#{semver_short}/#{semver}/single/qt-everywhere-src-#{semver}.tar.xz"
+    else
+      "https://download.qt.io/archive/qt/#{semver_short}/#{semver}/single/qt-everywhere-opensource-src-#{semver}.tar.xz"
+    end
   end
 
   def archive_path
-    "#{TEMPDIR}/qt-everywhere-opensource-src-#{@name}.0.tar.xz"
+    if @major == 5 && @minor >= 12
+      "#{TEMPDIR}/qt-everywhere-src-#{semver}.tar.xz"
+    else
+      "#{TEMPDIR}/qt-everywhere-opensource-src-#{semver}.tar.xz"
+    end
   end
 
   def path
-    "#{TEMPDIR}/qt-everywhere-opensource-src-#{@name}.0"
+    if @major == 5 && @minor >= 12
+      "#{TEMPDIR}/qt-everywhere-src-#{semver}"
+    else
+      "#{TEMPDIR}/qt-everywhere-opensource-src-#{semver}"
+    end
   end
 end
 
@@ -72,37 +99,74 @@ def report_step(message)
 end
 
 def download_missing_qts(versions)
-  urls = versions
+  missing_versions = versions
     .reject{|v| File.file? v.archive_path}
-    .map{|v| v.download_url}
 
-  if urls.empty?
+  if missing_versions.empty?
     report_step "All Qt sources already present"
     return
   end
 
-  arguments = [ "--remote-name-all", "--location" ] + urls
-
   report_step "Downloading missing Qt sources"
-  Dir.cd TEMPDIR do
-    system("curl", arguments)
+  missing_versions.each_with_index do |v, idx|
+    url = v.download_url
+    destfile =  Path[url].basename
+    partfile =  destfile + ".part"
+    arguments = [ 
+      "--continue-at", "-", 
+      "--remote-name-all", 
+      "--location",
+      "--output", partfile,
+      url
+    ] 
+
+    report(idx, missing_versions.size, "Downloading sources for version #{v.semver}")
+
+    
+    retry = 3
+    while retry > 0
+      Dir.cd TEMPDIR do
+        system("curl", arguments)
+      end
+
+      if $?.exit_code == 56 || $?.exit_code == 18
+        # the download was interrupted by remote party (retry 3 times)
+        retry = retry - 1
+      elsif $?.exit_code == 0
+        retry = 0
+      else
+        STDERR.puts "Failed to download Qt source for version #{v.semver} from #{url}"
+        exit 2
+      end
+    end
+
+    Dir.cd TEMPDIR do
+      FileUtils.mv partfile, destfile
+    end
   end
+
+
 end
 
 def unpack_qts(versions)
-  files = versions
+  remaining_files = versions
     .reject{|v| Dir.exists? v.path}
-    .map{|v| v.archive_path}
 
-  if files.empty?
+  if remaining_files.empty?
     report_step "All Qt sources already unpacked"
     return
   end
 
   report_step "Unpacking Qt sources"
-  files.each_with_index do |file, idx|
-    report(idx, files.size, "Unpacking #{file}")
-    system("tar", [ "-C", TEMPDIR, "-xf", file ])
+  remaining_files.each_with_index do |version, idx|
+    file = version.archive_path
+    report(idx, remaining_files.size, "Unpacking Qt version #{version.semver}")
+    system("tar", [ "-C", TEMPDIR, "-xaf", file ])
+
+    unless $?.success?
+      STDERR.puts "Failed to unpack Qt source for version #{version.semver} from #{file}"
+      exit 2
+    end
   end
 end
 
@@ -154,7 +218,7 @@ def configure_qts(versions)
 
   report_step "Configuring Qt versions"
   list.each_with_index do |qt, idx|
-    report(idx, list.size, "Configuring Qt#{qt}")
+    report(idx, list.size, "Configuring Qt #{qt.semver}")
 
     skip_modules = get_qt_modules(qt).reject{|x| keep_modules.includes? x}
     skip_args = skip_modules.flat_map{|x| [ "-skip", x ]}
